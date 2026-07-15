@@ -50,9 +50,14 @@ public class LoginServiceImpl implements LoginService {
             CurrentUserSession currentSession =
                     sessionRepo.findByEmail(loginDTO.getEmail());
 
+            // Customer already has an active session
             if (currentSession != null) {
-                throw new LoginException(
-                        "User already logged-In!"
+
+                return new LoginResponseDTO(
+                        "Already logged in!",
+                        currentSession.getPrivateKey(),
+                        customer.getCustomerId(),
+                        "customer"
                 );
             }
 
@@ -60,7 +65,9 @@ public class LoginServiceImpl implements LoginService {
                     new CurrentUserSession();
 
             currentUserSession.setEmail(loginDTO.getEmail());
-            currentUserSession.setLoginDateTime(LocalDateTime.now());
+            currentUserSession.setLoginDateTime(
+                    LocalDateTime.now()
+            );
             currentUserSession.setRole("customer");
 
             String privateKey = RandomString.make(6);
@@ -96,9 +103,14 @@ public class LoginServiceImpl implements LoginService {
             CurrentUserSession currentSession =
                     sessionRepo.findByEmail(loginDTO.getEmail());
 
+            // Admin already has an active session
             if (currentSession != null) {
-                throw new LoginException(
-                        "User already logged-In!"
+
+                return new LoginResponseDTO(
+                        "Already logged in!",
+                        currentSession.getPrivateKey(),
+                        admin.getAdminId(),
+                        "admin"
                 );
             }
 
@@ -106,7 +118,9 @@ public class LoginServiceImpl implements LoginService {
                     new CurrentUserSession();
 
             currentUserSession.setEmail(loginDTO.getEmail());
-            currentUserSession.setLoginDateTime(LocalDateTime.now());
+            currentUserSession.setLoginDateTime(
+                    LocalDateTime.now()
+            );
             currentUserSession.setRole("admin");
 
             String privateKey = RandomString.make(6);
@@ -121,11 +135,12 @@ public class LoginServiceImpl implements LoginService {
                     admin.getAdminId(),
                     "admin"
             );
+
+        } else {
+
+            throw new LoginException("Invalid role");
         }
-
-        throw new LoginException("Invalid role");
     }
-
 	@Override
 	public String logoutAccount(String role, String key) throws LoginException {
 
