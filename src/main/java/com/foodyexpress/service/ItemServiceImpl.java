@@ -17,6 +17,7 @@ import com.foodyexpress.model.ItemDTO;
 import com.foodyexpress.repository.CategoryRepo;
 import com.foodyexpress.repository.CurrentUserSessionRepo;
 import com.foodyexpress.repository.ItemRepo;
+import com.foodyexpress.model.ItemCreateDTO;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -30,29 +31,71 @@ public class ItemServiceImpl implements ItemService {
 	@Autowired
 	private CurrentUserSessionRepo currSession;
 
-	@Override
-	public Item addItem(String key, Item item) throws ItemException, CategoryException, LoginException {
+    @Override
+    public Item addItem(
+            String key,
+            ItemCreateDTO itemCreateDTO)
+            throws ItemException,
+            CategoryException,
+            LoginException {
 
-		CurrentUserSession currSess = currSession.findByPrivateKey(key);
-		if (currSess != null && currSess.getRole().equalsIgnoreCase("admin")) {
+        CurrentUserSession currSess =
+                currSession.findByPrivateKey(key);
 
-			Item existedItem = itemRepo.findByItemName(item.getItemName());
-			if (existedItem == null) {
+        if (currSess == null ||
+                !currSess.getRole()
+                        .equalsIgnoreCase("admin")) {
 
-				Category exCategory = categoryRepo.findByCategoryName(item.getCategory().getCategoryName());
-				if (exCategory != null) {
-					exCategory.getItemList().add(item);
-					item.setCategory(exCategory);
-					return itemRepo.save(item);
-				} else {
-					throw new CategoryException("Category doesn't exists!");
-				}
-			} else {
-				throw new ItemException("Item name already exits!");
-			}
-		} else
-			throw new LoginException("Admin login required");
-	}
+            throw new LoginException(
+                    "Admin login required"
+            );
+        }
+
+        Item existedItem =
+                itemRepo.findByItemName(
+                        itemCreateDTO.getItemName()
+                );
+
+        if (existedItem != null) {
+
+            throw new ItemException(
+                    "Item name already exists!"
+            );
+        }
+
+        Category category =
+                categoryRepo.findByCategoryName(
+                        itemCreateDTO.getCatergoryName()
+                );
+
+        if (category == null) {
+
+            throw new CategoryException(
+                    "Category doesn't exist!"
+            );
+        }
+
+        Item item = new Item();
+
+        item.setItemName(
+                itemCreateDTO.getItemName()
+        );
+
+        item.setCost(
+                itemCreateDTO.getCost()
+        );
+
+        item.setCategory(category);
+
+        item.setQuantity(0);
+
+        Item savedItem =
+                itemRepo.save(item);
+
+        category.getItemList().add(savedItem);
+
+        return savedItem;
+    }
 
 	@Override
 	public Item updateItem(String key, ItemDTO itemDTO) throws ItemException, CategoryException, LoginException {

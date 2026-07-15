@@ -20,66 +20,147 @@ import com.foodyexpress.exception.ItemException;
 import com.foodyexpress.exception.LoginException;
 import com.foodyexpress.model.CategoryDTO;
 import com.foodyexpress.model.Item;
+import com.foodyexpress.model.ItemCreateDTO;
 import com.foodyexpress.model.ItemDTO;
 import com.foodyexpress.service.ItemService;
 
 @RestController
 @RequestMapping("/items")
-public class    ItemController {
+public class ItemController {
 
-	@Autowired
-	private ItemService itemService;
+    @Autowired
+    private ItemService itemService;
 
-	@GetMapping("/all")
-	public ResponseEntity<List<Item>> getAllItem(@RequestParam(required = false) String key)
-			throws ItemException, LoginException {
-		List<Item> itemList = itemService.getAllItem(key);
-		return new ResponseEntity<List<Item>>(itemList, HttpStatus.OK);
-	}
+    @GetMapping("/all")
+    public ResponseEntity<List<Item>> getAllItem(
+            @RequestParam(required = false) String key)
+            throws ItemException, LoginException {
 
-	@GetMapping("/category")
-	public ResponseEntity<List<Item>> getAllItemByCategory(@RequestParam(required = false) String key,
-			@RequestBody CategoryDTO categoryDTO) throws ItemException, CategoryException, LoginException {
-		List<Item> itemList = itemService.getAllItemByCategory(key, categoryDTO);
-		return new ResponseEntity<List<Item>>(itemList, HttpStatus.OK);
-	}
+        List<Item> itemList =
+                itemService.getAllItem(key);
 
-	@GetMapping("/get/{categoryName}")
-	public ResponseEntity<List<Item>> getAllItemByCategoryName(@RequestParam(required = false) String key,
-			@PathVariable String categoryName) throws ItemException, CategoryException, LoginException {
-		List<Item> itemList = itemService.getAllItemByCategoryName(key, categoryName);
-		return new ResponseEntity<List<Item>>(itemList, HttpStatus.OK);
-	}
+        return new ResponseEntity<>(
+                itemList,
+                HttpStatus.OK
+        );
+    }
 
-	@PostMapping("/add")
-	public ResponseEntity<Item> addItem(@RequestParam(required = false) String key, @RequestBody Item item)
-			throws ItemException, CategoryException, LoginException {
-		Item savedItem = itemService.addItem(key, item);
+    @GetMapping("/category")
+    public ResponseEntity<List<Item>> getAllItemByCategory(
+            @RequestParam(required = false) String key,
+            @RequestBody CategoryDTO categoryDTO)
+            throws ItemException,
+            CategoryException,
+            LoginException {
 
-		return new ResponseEntity<Item>(savedItem, HttpStatus.CREATED);
-	}
+        List<Item> itemList =
+                itemService.getAllItemByCategory(
+                        key,
+                        categoryDTO
+                );
 
-	@PutMapping("/update")
-	public ResponseEntity<Item> updateItem(@RequestParam(required = false) String key, @RequestBody ItemDTO itemDTO)
-			throws ItemException, CategoryException, LoginException {
-		Item updatedItem = itemService.updateItem(key, itemDTO);
+        return new ResponseEntity<>(
+                itemList,
+                HttpStatus.OK
+        );
+    }
 
-		return new ResponseEntity<Item>(updatedItem, HttpStatus.ACCEPTED);
-	}
+    @GetMapping("/get/{categoryName}")
+    public ResponseEntity<List<Item>>
+    getAllItemByCategoryName(
+            @RequestParam(required = false) String key,
+            @PathVariable String categoryName)
+            throws ItemException,
+            CategoryException,
+            LoginException {
 
-	@DeleteMapping("/delete")
-	public ResponseEntity<Item> removeItem(@RequestParam(required = false) String key, @RequestBody ItemDTO itemDTO)
-			throws ItemException, LoginException {
-		Item deletedItem = itemService.removeItem(key, itemDTO);
+        List<Item> itemList =
+                itemService.getAllItemByCategoryName(
+                        key,
+                        categoryName
+                );
 
-		return new ResponseEntity<Item>(deletedItem, HttpStatus.OK);
-	}
+        return new ResponseEntity<>(
+                itemList,
+                HttpStatus.OK
+        );
+    }
 
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<Item> removeItemById(@RequestParam(required = false) String key,
-			@PathVariable("id") Integer id) throws ItemException, LoginException {
-		Item deletedItem = itemService.removeItemById(key, id);
+    @PostMapping("/add")
+    public ResponseEntity<Item> addItem(
+            @RequestParam(required = false) String key,
+            @RequestBody ItemCreateDTO itemCreateDTO)
+            throws ItemException,
+            CategoryException,
+            LoginException {
 
-		return new ResponseEntity<Item>(deletedItem, HttpStatus.OK);
-	}
+        Item savedItem =
+                itemService.addItem(
+                        key,
+                        itemCreateDTO
+                );
+
+        return new ResponseEntity<>(
+                savedItem,
+                HttpStatus.CREATED
+        );
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Item> updateItem(
+            @RequestParam(required = false) String key,
+            @RequestBody ItemDTO itemDTO)
+            throws ItemException,
+            CategoryException,
+            LoginException {
+
+        Item updatedItem =
+                itemService.updateItem(
+                        key,
+                        itemDTO
+                );
+
+        return new ResponseEntity<>(
+                updatedItem,
+                HttpStatus.ACCEPTED
+        );
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Item> removeItem(
+            @RequestParam(required = false) String key,
+            @RequestBody ItemDTO itemDTO)
+            throws ItemException,
+            LoginException {
+
+        Item deletedItem =
+                itemService.removeItem(
+                        key,
+                        itemDTO
+                );
+
+        return new ResponseEntity<>(
+                deletedItem,
+                HttpStatus.OK
+        );
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Item> removeItemById(
+            @RequestParam(required = false) String key,
+            @PathVariable("id") Integer id)
+            throws ItemException,
+            LoginException {
+
+        Item deletedItem =
+                itemService.removeItemById(
+                        key,
+                        id
+                );
+
+        return new ResponseEntity<>(
+                deletedItem,
+                HttpStatus.OK
+        );
+    }
 }
