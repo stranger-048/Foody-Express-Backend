@@ -81,13 +81,15 @@ public class ItemServiceImpl implements ItemService {
                 itemCreateDTO.getItemName()
         );
 
+        item.setCategory(category);
+
+        item.setQuantity(
+                itemCreateDTO.getQuantity()
+        );
+
         item.setCost(
                 itemCreateDTO.getCost()
         );
-
-        item.setCategory(category);
-
-        item.setQuantity(0);
 
         Item savedItem =
                 itemRepo.save(item);

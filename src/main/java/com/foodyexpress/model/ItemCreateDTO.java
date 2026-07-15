@@ -10,7 +10,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class ItemCreateDTO {
-	private String itemName;
-	private String catergoryName;
-	private Double cost;
+
+    private String itemName;
+    private String catergoryName;
+    private Integer quantity;
+    private Double cost;
 }
