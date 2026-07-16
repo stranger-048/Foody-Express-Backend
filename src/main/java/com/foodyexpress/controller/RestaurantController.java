@@ -61,9 +61,9 @@ public class RestaurantController {
 	}
 
 	@GetMapping("/view")
-	public ResponseEntity<List<Restaurant>> viewAllRestaurant(@RequestParam(required = false) String key)
+	public ResponseEntity<List<Restaurant>> viewAllRestaurant()
 			throws RestaurantException, LoginException {
-		List<Restaurant> restaurant = resService.getAllRestaurants(key);
+		List<Restaurant> restaurant = resService.getAllRestaurants();
 		return new ResponseEntity<List<Restaurant>>(restaurant, HttpStatus.OK);
 	}
 

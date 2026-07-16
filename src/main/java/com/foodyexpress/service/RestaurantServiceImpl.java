@@ -106,12 +106,8 @@ public class RestaurantServiceImpl implements RestaurantService {
 	}
 
 	@Override
-	public List<Restaurant> getAllRestaurants(String key) throws RestaurantException, LoginException {
+	public List<Restaurant> getAllRestaurants() throws RestaurantException, LoginException {
 		// TODO Auto-generated method stub
-
-		CurrentUserSession currSess = currSession.findByPrivateKey(key);
-		if (currSess == null)
-			throw new LoginException("Login required");
 
 		List<Restaurant> restaurantList = resRepo.findAll();
 		if (!restaurantList.isEmpty()) {

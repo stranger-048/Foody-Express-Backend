@@ -18,7 +18,7 @@ public interface RestaurantService {
 
 	public Restaurant viewRestaurantById(String key, Integer restaurantId) throws RestaurantException, LoginException;
 
-	public List<Restaurant> getAllRestaurants(String key) throws RestaurantException, LoginException;
+	public List<Restaurant> getAllRestaurants() throws RestaurantException, LoginException;
 
 	public List<Restaurant> viewNearByRestaurant(String key, String city)
 			throws RestaurantException, AddressException, LoginException;
